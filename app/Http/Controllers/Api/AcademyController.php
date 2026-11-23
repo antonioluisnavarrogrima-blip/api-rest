@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api;
 
-use App\Models\Student;
+use App\Models\Academy;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class AcademyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +26,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Student $student)
+    public function show(Academy $academy)
     {
         //
     }
@@ -34,7 +34,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, Academy $academy)
     {
         //
     }
@@ -42,7 +42,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Student $student)
+    public function destroy(Academy $academy)
     {
         //
     }
