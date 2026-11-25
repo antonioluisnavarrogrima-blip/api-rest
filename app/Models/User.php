@@ -13,18 +13,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens; //Para manejar los tokens de validación de usuario
 
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email','password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    protected $fillable = [
-        'user_id',
-        'name',
-        'description',
-        'address',
-        'phone',
-        'email',
-    ];
     public function academies()
     {
         return $this->hasMany(Academy::class);
