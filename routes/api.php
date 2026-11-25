@@ -14,6 +14,6 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 
-Route::apiResource('academies', AcademyController::class)->middleware('auth:sanctum')->name('logout');
-Route::apiResource('courses', CourseController::class)->middleware('auth:sanctum')->name('logout');
-Route::apiResource('students', StudentController::class)->middleware('auth:sanctum')->name('logout');
+Route::apiResource('academies', AcademyController::class)->middleware('auth:sanctum');
+Route::apiResource('courses', CourseController::class)->middleware('auth:sanctum');
+Route::apiResource('students', StudentController::class)->middleware('auth:sanctum');

@@ -17,6 +17,19 @@ use Laravel\Sanctum\HasApiTokens; //Para manejar los tokens de validación de us
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+    protected $fillable = [
+        'user_id',
+        'name',
+        'description',
+        'address',
+        'phone',
+        'email',
+    ];
+    public function academies()
+    {
+        return $this->hasMany(Academy::class);
+    }
+    
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
