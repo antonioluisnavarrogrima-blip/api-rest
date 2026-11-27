@@ -6,6 +6,7 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Academy;
+use App\Models\Student;
 use App\Http\Controllers\Controller;
 
 
@@ -54,7 +55,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-         
+
         $validated = $request->validate([ //Valido igual que post pero con sometimes para admitir patchs
             'academy_id' => 'sometimes|required|integer|exists:academies,id',
             'name' => 'sometimes|required|string|max:150',
@@ -78,20 +79,39 @@ class CourseController extends Controller
         Gate::authorize('delete', $course); // Si no es el dueño, devuelve 403 automáticamente
         $course->delete();
         return response()->json(['message' => 'Curso eliminado'], 200);
-        
+
     }
     public function students(Course $course)
     {
-        //
+        return response()->json($course->students, 200);
     }
 
-    public function enroll(Request $request, Course $course)
+    public function enroll(Request $request, Course $course) //Este método matricula a un alumno en un curso
     {
-        //
+        Gate::authorize('update', $course);
+        if ($course->students()->count() >= $course->capacity) { //Si no hay espacio para más alumnos no hago nada
+            return response()->json(['message' => 'El curso ha alcanzado su capacidad máxima'], 409);
+        }
+
+
+        $validated = $request->validate([
+            'student_id' => 'required|integer|exists:students,id'
+        ]);
+
+        //Verifico si ya está matriculado
+        if ($course->students()->where('student_id', $validated['student_id'])->exists()) {
+            return response()->json(['message' => 'El alumno ya está matriculado en este curso'], 409);
+        }
+        //Lo añado a la tabla intermedia
+        $course->students()->attach($validated['student_id'], ['enrolled_at' => now()]);
+
+        return response()->json(['message' => 'Alumno matriculado correctamente'], 201);
     }
 
     public function unenroll(Request $request, Course $course, Student $student)
     {
-        //
+        Gate::authorize('update', $course);
+        $course->students()->detach($student->id);
+        return response()->json(['message' => 'Se ha desmatriculado a '.$student->name], 200);
     }
 }
