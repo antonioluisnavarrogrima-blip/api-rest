@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Academy;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class AcademyController extends Controller
 {
@@ -45,7 +47,16 @@ class AcademyController extends Controller
      */
     public function update(Request $request, Academy $academy)
     {
-        //
+        Gate::authorize('update', $academy);//Reviso que sea el dueño
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:100',
+            'description' => 'sometimes|nullable|string',
+            'address' => 'sometimes|required|string|max:255',
+            'phone' => 'sometimes|required|string|max:15',
+            'email' => 'sometimes|required|email|unique:academies,email,' . $academy->id,
+        ]);
+        $academy->update($validated);
+        return response()->json($academy, 200);
     }
 
     /**
@@ -53,6 +64,9 @@ class AcademyController extends Controller
      */
     public function destroy(Academy $academy)
     {
-        //
+        Gate::authorize('update', $academy);//Reviso que sea el dueño
+        $academy->delete();
+        return response()->json(['message' => 'Academia eliminada'], 200);
+
     }
 }
