@@ -14,8 +14,6 @@ Route::get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-
-
 //gestión de matriculaciones
 Route::middleware('auth:sanctum')->group(function () { //Formo un grupo de rutas que tendrán el middleware de sanctum
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

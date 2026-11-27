@@ -20,7 +20,16 @@ class AcademyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Valida que todos los datos de academy sean correctos y que el email no esté repetido por otra academia
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'description' => 'nullable|string',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'email' => 'required|email|unique:academies,email',
+        ]);
+        $academy = $request->user()->academies()->create($validated); //Creo una academia relacionada con el suaurio
+        return response()->json($academy, 201); //devuelvo el json com mensaje de éxito
     }
 
     /**
@@ -28,7 +37,7 @@ class AcademyController extends Controller
      */
     public function show(Academy $academy)
     {
-        //
+        return response()->json($academy, 200);
     }
 
     /**
