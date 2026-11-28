@@ -12,7 +12,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Student::all(), 200);
     }
 
     /**
@@ -20,7 +20,15 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'surname' => 'required|string|max:150',
+            'email' => 'required|email|unique:students,email',
+            'phone' => 'nullable|string|max:15',
+            'date_of_birth' => 'nullable|date',
+        ]);
+         $student = Student::create($validated);
+        return response()->json($student, 201);
     }
 
     /**
@@ -28,7 +36,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return response()->json($student, 200);
     }
 
     /**
@@ -36,7 +44,15 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string|max:100',
+            'surname' => 'sometimes|required|string|max:150',
+            'email' => 'sometimes|required|email|unique:students,email',
+            'phone' => 'sometimes|nullable|string|max:15',
+            'date_of_birth' => 'sometimes|nullable|date',
+        ]);
+        $student->update($validated);
+        return response()->json($student, 200);
     }
 
     /**
@@ -44,6 +60,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+         $student->delete();
+        return response()->json(['message' => 'Estudiante eliminado'], 200);
     }
 }

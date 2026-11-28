@@ -69,4 +69,10 @@ class AcademyController extends Controller
         return response()->json(['message' => 'Academia eliminada'], 200);
 
     }
+     public function courses(Academy $academy)
+    {
+        
+        return response()->json($academy->courses, 200);
+
+    }
 }
